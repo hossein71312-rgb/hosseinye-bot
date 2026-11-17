@@ -6,12 +6,22 @@ import requests
 import feedparser
 from bs4 import BeautifulSoup
 
+# منابع داخلی اولویت دارند؛ فید خراب یا مسدود فقط رد می‌شود (لاگ Actions وضعیت هر فید را نشان می‌دهد).
 DEFAULT_FEEDS = [
+    "https://www.isna.ir/rss",
+    "https://www.irna.ir/rss",
+    "https://www.khabaronline.ir/rss",
+    "https://www.tabnak.ir/fa/rss/allnews",
+    "https://www.ilna.ir/rss",
     "https://feeds.bbci.co.uk/persian/rss.xml",
     "https://rss.dw.com/xml/rss-far-all",
 ]
+FOREIGN = ("bbci.co.uk", "dw.com")  # از این منابع فقط چند خبر اخیر برداشته می‌شود
 
 UA = {"User-Agent": "NabzIranBot/1.1 (Rubika channel publisher)"}
+BROWSER_UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                            "(KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+              "Accept": "application/rss+xml, application/xml, text/xml, */*"}
 BAD_TITLE = ("map", "flag", "logo", "coat of arms", "diagram", "plan", "poster",
              "stamp", "banknote", "drawing", "painting", "locator", "route", "chart")
 
@@ -31,9 +41,13 @@ def get_news():
     results = []
     for feed_url in feeds():
         try:
-            parsed = feedparser.parse(feed_url)
-            source = parsed.feed.get("title", feed_url)
-            for entry in parsed.entries[:40]:
+            resp = requests.get(feed_url, headers=BROWSER_UA, timeout=25)
+            resp.raise_for_status()
+            parsed = feedparser.parse(resp.content)
+            source = (parsed.feed.get("title") or feed_url).split("|")[0].split(" - ")[0].strip()[:40]
+            limit = 10 if any(d in feed_url for d in FOREIGN) else 40
+            print(f"feed ok: {feed_url} -> {len(parsed.entries)} items")
+            for entry in parsed.entries[:limit]:
                 title = clean_html(entry.get("title", ""))
                 summary = clean_html(entry.get("summary", entry.get("description", "")))
                 link = entry.get("link", "")
@@ -47,7 +61,7 @@ def get_news():
                     "ts": time.mktime(ts) if ts else 0,
                 })
         except Exception as exc:
-            print(f"RSS error ({feed_url}): {exc}")
+            print(f"feed FAILED: {feed_url}: {exc}")
     results.sort(key=lambda x: x["ts"], reverse=True)  # تازه‌ترین اول
     return results
 
