@@ -21,12 +21,13 @@
     "1b33c49003ccef02f0c30f028dfbf81d7b62acdcd86d3c182f389eb2441aa806",
     "95fa1a04d5b6f8062f2b908700e7fd9bc0a0f2e1ad7f16a29b38eb0c5cea53b1",
     "commons:File:Persépolis, Irán, 2016-09-24, DD 53.jpg",
-    "ee1fdb558f7b35d22d936ee98655af7ec4e3b6b3523aacd6f2fd73328ea07e1f"
+    "ee1fdb558f7b35d22d936ee98655af7ec4e3b6b3523aacd6f2fd73328ea07e1f",
+    "commons:File:Kandovan troglodyte village.jpg"
   ],
-  "n": 22,
+  "n": 23,
   "idx": {
     "nature": 3,
     "history": 3,
-    "village": 2
+    "village": 3
   }
 }
