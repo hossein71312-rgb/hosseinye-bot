@@ -1,7 +1,10 @@
 {
   "published": [
-    "a7703450ee03ae38205e29dde7abbc25fba18ad49a28835e66e8263858758286"
+    "a7703450ee03ae38205e29dde7abbc25fba18ad49a28835e66e8263858758286",
+    "commons:File:Clouds forest - Shirin Abad - panoramio.jpg"
   ],
-  "n": 1,
-  "idx": {}
+  "n": 2,
+  "idx": {
+    "nature": 1
+  }
 }
