@@ -1,0 +1,52 @@
+name: Nabz Iran Auto Publisher
+
+# زمان‌بندی را cron-job.org انجام می‌دهد (workflow dispatch)؛ برای جلوگیری از پست تکراری، schedule حذف شده است.
+on:
+  workflow_dispatch:
+    inputs:
+      category:
+        description: "Optional: economy, livelihood, war, top, nature, village, history"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nabz-iran-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Publish one post
+        env:
+          RUBIKA_BOT_TOKEN: ${{ secrets.RUBIKA_BOT_TOKEN }}
+          RUBIKA_CHANNEL_ID: ${{ secrets.RUBIKA_CHANNEL_ID }}
+          RSS_FEEDS: ${{ vars.RSS_FEEDS }}
+          POST_CATEGORY: ${{ inputs.category }}
+        run: python main.py
+
+      - name: Save history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add database/published.json
+          git diff --cached --quiet || git commit -m "Update published content history"
+          git push
