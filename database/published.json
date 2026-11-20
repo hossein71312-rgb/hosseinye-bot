@@ -93,12 +93,13 @@
     "c4a89ffb9b89f9d9148214e9386c919a79dd20f934685a7959bfc01136965b27",
     "1c92c3f24558a1aaff2117e94f4446f1a0d77c8e296d15804945e514d4bee8fd",
     "commons:File:Bazaar of Tabriz, carvaansray.jpg",
-    "334d6ddf6e5217f02bbaad8bb0304d3c23bb2de267f2e4ebc92608d7e85310d2"
+    "334d6ddf6e5217f02bbaad8bb0304d3c23bb2de267f2e4ebc92608d7e85310d2",
+    "commons:File:The mud village of Kharanaq, Iran.jpg"
   ],
-  "n": 94,
+  "n": 95,
   "idx": {
     "nature": 4,
     "history": 12,
-    "village": 5
+    "village": 6
   }
 }
